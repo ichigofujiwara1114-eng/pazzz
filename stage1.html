@@ -204,17 +204,20 @@
         document.getElementById("display").innerText = ""; 
     }
 
-    function checkAnswer() {
+        function checkAnswer() {
         if (input === answer) {
+            // クリア記録を保存！
+            localStorage.setItem('stage1_cleared', 'true');
+            
             document.getElementById("correct-overlay").style.display = "flex";
             setTimeout(() => { 
                 location.href = 'index.html'; 
             }, 2000);
         } else {
-            // 間違っていたら何も出さずに白紙にするでありんす
             clearInput();
         }
     }
+
 </script>
 
 </body>
