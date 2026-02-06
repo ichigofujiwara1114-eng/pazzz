@@ -24,17 +24,19 @@
     </div>
 
     <script>
-        // ST1をクリアしていたらST2を解放
-        if (localStorage.getItem('stage1_cleared') === 'true') {
+        // URLの「?clear=〇」を見て、どこまで解禁するか決めるでありんす
+        const params = new URLSearchParams(window.location.search);
+        const clearLevel = parseInt(params.get('clear')) || 0;
+
+        if (clearLevel >= 1) {
             const btn = document.getElementById('st2');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage2.html'; };
+            btn.onclick = function() { location.href = 'stage2.html?from=1'; };
         }
-        // ST2をクリアしていたらST3を解放
-        if (localStorage.getItem('stage2_cleared') === 'true') {
+        if (clearLevel >= 2) {
             const btn = document.getElementById('st3');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage3.html'; };
+            btn.onclick = function() { location.href = 'stage3.html?from=2'; };
         }
     </script>
 </body>
