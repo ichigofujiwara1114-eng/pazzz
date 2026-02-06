@@ -5,39 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Menu</title>
     <style>
+        /* レトロなフォントを読み込み */
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        body { background: #90EE90; font-family: 'Press Start 2P', cursive; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        h1 { font-size: 18px; color: #444; margin-bottom: 40px; }
-        .menu-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .stage-btn { background: #fff; border: 4px solid #444; padding: 20px; text-align: center; cursor: pointer; box-shadow: 6px 6px 0 rgba(0,0,0,0.1); text-decoration: none; color: inherit; display: block; }
-        .stage-btn:active { transform: translate(4px, 4px); box-shadow: 0 0; }
-        .locked { background: #ccc; cursor: not-allowed; color: #777; pointer-events: none; }
+
+        body { 
+            background: #90EE90; 
+            font-family: 'Press Start 2P', cursive; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+        }
+
+        h1 { 
+            font-size: 18px; 
+            color: #444; 
+            margin-bottom: 40px; 
+            text-shadow: 3px 3px 0 rgba(255,255,255,0.5);
+        }
+
+        .menu-container { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; 
+        }
+
+        .stage-btn { 
+            background: #fff; 
+            border: 4px solid #444; 
+            padding: 25px; 
+            text-align: center; 
+            cursor: pointer; 
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.1); 
+            text-decoration: none; 
+            color: inherit; 
+            display: block; 
+            font-size: 16px;
+            transition: transform 0.1s;
+        }
+
+        /* 押した時の凹み演出 */
+        .stage-btn:active:not(.locked) { 
+            transform: translate(4px, 4px); 
+            box-shadow: 0 0; 
+        }
+
+        /* ロック状態のスタイル */
+        .locked { 
+            background: #ccc; 
+            cursor: not-allowed; 
+            color: #777; 
+            border-color: #888;
+            pointer-events: none; /* クリックを無効化 */
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
+
     <h1>CHOOSE STAGE</h1>
+
     <div class="menu-container">
         <div class="stage-btn" onclick="location.href='stage1.html'">ST1</div>
+        
         <div id="st2" class="stage-btn locked">ST2</div>
         <div id="st3" class="stage-btn locked">ST3</div>
         <div id="st4" class="stage-btn locked">ST4</div>
     </div>
 
     <script>
-        // URLの「?clear=〇」を見て、どこまで解禁するか決めるでありんす
+        // URLの「?clear=〇」をチェックして、クリア状況を取得するでありんす
         const params = new URLSearchParams(window.location.search);
         const clearLevel = parseInt(params.get('clear')) || 0;
 
+        // --- STAGE 2 の解禁 ---
         if (clearLevel >= 1) {
             const btn = document.getElementById('st2');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage2.html?from=1'; };
+            btn.onclick = function() { location.href = 'stage2.html?clear=1'; };
         }
+
+        // --- STAGE 3 の解禁 ---
         if (clearLevel >= 2) {
             const btn = document.getElementById('st3');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage3.html?from=2'; };
+            btn.onclick = function() { location.href = 'stage3.html?clear=2'; };
+        }
+
+        // --- STAGE 4 の解禁 ---
+        if (clearLevel >= 3) {
+            const btn = document.getElementById('st4');
+            btn.classList.remove('locked');
+            btn.onclick = function() { location.href = 'stage4.html?clear=3'; };
         }
     </script>
+
 </body>
 </html>
