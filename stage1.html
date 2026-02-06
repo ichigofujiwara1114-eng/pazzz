@@ -58,15 +58,18 @@
     const answer = "0"; 
     function press(val) { if (input.length < 10) { input += val; document.getElementById("display").innerText = input; } }
     function clearInput() { input = ""; document.getElementById("display").innerText = ""; }
-    function checkAnswer() {
+        function checkAnswer() {
         if (input === answer) {
-            localStorage.setItem('stage1_cleared', 'true'); // 記録保存
             document.getElementById("correct-overlay").style.display = "flex";
-            setTimeout(() => { location.href = 'index.html'; }, 2000);
+            setTimeout(() => { 
+                // index.htmlに「1をクリアしたよ」と伝えて戻るでありんす
+                location.href = 'index.html?clear=1'; 
+            }, 2000);
         } else {
             clearInput();
         }
     }
+
 </script>
 </body>
 </html>
