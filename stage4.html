@@ -8,6 +8,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         body { margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #90EE90; font-family: 'Press Start 2P', cursive; box-sizing: border-box; overflow-x: hidden; }
         
+        /* 戻るボタンのスタイル */
+        .back-nav { align-self: flex-start; margin-bottom: 10px; width: 92vw; max-width: 900px; }
+        .back-btn-top { background: #fff; border: 3px solid #444; padding: 5px 10px; cursor: pointer; font-size: 10px; font-family: inherit; }
+        .back-btn-top:active { transform: translateY(2px); }
+
         .whiteboard { 
             background: #fff; border: 4px solid #444; 
             padding: 10px; width: 92vw; max-width: 900px; min-height: 100px; 
@@ -43,6 +48,10 @@
     </style>
 </head>
 <body>
+<div class="back-nav">
+    <button class="back-btn-top" onclick="location.href='index.html'">BACK</button>
+</div>
+
 <div id="board" class="whiteboard"></div>
 <div class="display-container"><div id="display" class="display-text"></div></div>
 <div class="keypad">
@@ -75,7 +84,6 @@
         { html: `<div class="formula-line">4 ${STAIRS_CUT.replace('38,8','38,8 38,18')} 3-5 2 ${DIAGONAL_ARROW_2} 4 = ?</div>`, ans: "18" },
         { html: `<div class="formula-line">2-3 ${Q3_G_SIMPLE} ${S3_DOWN} ${S2_CIR_EDGES} 4-4 ${Q3_G_EVO} 1-4 = ?</div>`, ans: "251" },
         { html: `<div class="formula-line">7 ${Q4_V_BAR} ${S2_ALL} ${Q4_S3UP_EDGES} 5 2 1 ${DIAGONAL_ARROW_2} 8 = ?</div>`, ans: "325" },
-        // 第5問：数値を4-85に変更
         { html: `<div class="formula-line">2-6 ${S3_UP} ${STAIRS_CUT} ${S2_ALL} ${DIAGONAL_ARROW_DOWN_3} ${S2_ALL} 4-85 ${S2_CIR} ${Q4_V_BAR} 19-7 = ?</div>`, ans: "39-7" }
     ];
 
