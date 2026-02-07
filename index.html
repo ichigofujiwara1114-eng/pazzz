@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puzzle Menu</title>
+    <title>不測演算 - Puzzle Menu</title>
     <style>
-        /* レトロなフォントを読み込み */
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        /* レトロなフォントと日本語ドットフォントを読み込み */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap');
 
         body { 
             background: #90EE90; 
@@ -19,11 +19,25 @@
             margin: 0; 
         }
 
+        /* ポップなタイトルのスタイル */
+        .game-title {
+            font-family: 'DotGothic16', sans-serif;
+            font-size: 64px;
+            margin-bottom: 10px;
+            /* ポップなグラデーション */
+            background: linear-gradient(to bottom, #ff00de, #ff7675, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* 文字の縁取り */
+            filter: drop-shadow(4px 4px 0px #444);
+            letter-spacing: 4px;
+        }
+
         h1 { 
-            font-size: 18px; 
+            font-size: 14px; 
             color: #444; 
             margin-bottom: 40px; 
-            text-shadow: 3px 3px 0 rgba(255,255,255,0.5);
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.5);
         }
 
         .menu-container { 
@@ -46,24 +60,24 @@
             transition: transform 0.1s;
         }
 
-        /* 押した時の凹み演出 */
         .stage-btn:active:not(.locked) { 
             transform: translate(4px, 4px); 
             box-shadow: 0 0; 
         }
 
-        /* ロック状態のスタイル */
         .locked { 
             background: #ccc; 
             cursor: not-allowed; 
             color: #777; 
             border-color: #888;
-            pointer-events: none; /* クリックを無効化 */
+            pointer-events: none; 
             opacity: 0.7;
         }
     </style>
 </head>
 <body>
+
+    <div class="game-title">不測演算</div>
 
     <h1>CHOOSE STAGE</h1>
 
@@ -76,25 +90,21 @@
     </div>
 
     <script>
-        // URLの「?clear=〇」をチェックして、クリア状況を取得するでありんす
         const params = new URLSearchParams(window.location.search);
         const clearLevel = parseInt(params.get('clear')) || 0;
 
-        // --- STAGE 2 の解禁 ---
         if (clearLevel >= 1) {
             const btn = document.getElementById('st2');
             btn.classList.remove('locked');
             btn.onclick = function() { location.href = 'stage2.html?clear=1'; };
         }
 
-        // --- STAGE 3 の解禁 ---
         if (clearLevel >= 2) {
             const btn = document.getElementById('st3');
             btn.classList.remove('locked');
             btn.onclick = function() { location.href = 'stage3.html?clear=2'; };
         }
 
-        // --- STAGE 4 の解禁 ---
         if (clearLevel >= 3) {
             const btn = document.getElementById('st4');
             btn.classList.remove('locked');
