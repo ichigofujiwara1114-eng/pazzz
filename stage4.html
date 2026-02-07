@@ -8,7 +8,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         body { margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #90EE90; font-family: 'Press Start 2P', cursive; box-sizing: border-box; overflow-x: hidden; }
         
-        /* 戻るボタンのスタイル */
         .back-nav { align-self: flex-start; margin-bottom: 10px; width: 92vw; max-width: 900px; }
         .back-btn-top { background: #fff; border: 3px solid #444; padding: 5px 10px; cursor: pointer; font-size: 10px; font-family: inherit; }
         .back-btn-top:active { transform: translateY(2px); }
@@ -21,15 +20,8 @@
             position: relative; overflow-x: hidden;
         }
         
-        .formula-line { 
-            display: flex; align-items: center; gap: 2px; 
-            font-size: 2.8vw; 
-            color: #333; white-space: nowrap; 
-        }
-        @media screen and (min-width: 800px) {
-            .formula-line { font-size: 18px; }
-            .special-svg { width: 24px; height: 24px; }
-        }
+        .formula-line { display: flex; align-items: center; gap: 2px; font-size: 2.8vw; color: #333; white-space: nowrap; }
+        @media screen and (min-width: 800px) { .formula-line { font-size: 18px; } .special-svg { width: 24px; height: 24px; } }
         
         .special-svg { width: 3.5vw; height: 3.5vw; flex-shrink: 0; display: inline-block; vertical-align: middle; }
         .special-svg path, .special-svg polyline, .special-svg circle { fill: none; stroke: #333; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -48,10 +40,7 @@
     </style>
 </head>
 <body>
-<div class="back-nav">
-    <button class="back-btn-top" onclick="location.href='index.html'">BACK</button>
-</div>
-
+<div class="back-nav"><button class="back-btn-top" onclick="location.href='index.html'">BACK</button></div>
 <div id="board" class="whiteboard"></div>
 <div class="display-container"><div id="display" class="display-text"></div></div>
 <div class="keypad">
@@ -63,7 +52,10 @@
 </div>
 
 <script>
-    let step = 0;
+    // 保存用のキー設定
+    const SAVE_KEY = 'st4_progress_step';
+    // ブラウザの記憶から今のステップを読み込み、なければ0から開始
+    let step = parseInt(localStorage.getItem(SAVE_KEY)) || 0;
     let input = "";
 
     const S2_CIR = `<div class="special-svg"><svg viewBox="0 0 40 40"><path d="M5,20 H13 M27,20 H35"/><circle cx="20" cy="20" r="7"/></svg></div>`;
@@ -89,20 +81,35 @@
 
     function load() {
         input = ""; document.getElementById("display").innerText = "";
+        // 念のためのインデックス範囲チェック
+        if (step >= questions.length) step = 0;
         document.getElementById("board").innerHTML = questions[step].html;
+        // 今の進行状況を保存するでありんす
+        localStorage.setItem(SAVE_KEY, step);
     }
+    
     function press(n) { input += n; document.getElementById("display").innerText = input; }
     function clearInput() { input = ""; document.getElementById("display").innerText = ""; }
+    
     function checkAnswer() {
         if (input === questions[step].ans) {
             step++;
             if(step >= questions.length) {
+                // 完全クリアしたら、次は最初から遊べるように記憶を消去
+                localStorage.removeItem(SAVE_KEY);
                 const overlay = document.createElement('div');
                 overlay.className = 'congrats-overlay';
                 overlay.innerHTML = `<div class="congrats-title">おめでとう！<br>あなたは不測演算を<br>クリアした！</div><button class="back-btn" onclick="location.href='index.html?clear=4'">MENU</button>`;
                 document.body.appendChild(overlay);
-            } else { load(); }
-        } else { step = 0; load(); }
+            } else { 
+                // 次の問題へ進む前に進行状況を保存
+                localStorage.setItem(SAVE_KEY, step);
+                load(); 
+            }
+        } else { 
+            // 不正解なら入力だけ消すでありんす。一からやり直しにはさせないのが一護の優しさ。
+            clearInput(); 
+        }
     }
     load();
 </script>
