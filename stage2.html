@@ -9,8 +9,9 @@
         body { margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #90EE90; font-family: 'Press Start 2P', cursive; box-sizing: border-box; }
         
         /* 戻るボタンのスタイル */
-        .back-btn { align-self: flex-start; background: #fff; border: 3px solid #444; padding: 5px 10px; cursor: pointer; font-size: 10px; font-family: inherit; margin-bottom: 10px; }
-        .back-btn:active { transform: translateY(2px); }
+        .back-nav { align-self: flex-start; margin-bottom: 10px; width: 100%; max-width: 400px; }
+        .back-btn-top { background: #fff; border: 3px solid #444; padding: 5px 10px; cursor: pointer; font-size: 10px; font-family: inherit; }
+        .back-btn-top:active { transform: translateY(2px); }
 
         .whiteboard { background: #fff; border: 6px solid #444; padding: 20px 10px; width: 100%; max-width: 400px; box-shadow: 10px 10px 0 rgba(0,0,0,0.1); margin-bottom: 20px; }
         .line { display: flex; align-items: center; height: 45px; font-size: 14px; margin-bottom: 8px; white-space: nowrap; }
@@ -35,7 +36,9 @@
 </head>
 <body>
 
-<button class="back-btn" onclick="location.href='index.html'">BACK</button>
+<div class="back-nav">
+    <button class="back-btn-top" onclick="location.href='index.html?clear=1'">BACK</button>
+</div>
 
 <div id="correct-overlay"><div>〇</div></div>
 <div class="whiteboard">
@@ -58,19 +61,41 @@
     <button class="key clear" onclick="clearInput()">C</button><button class="key" onclick="press(0)">0</button><button class="key enter" onclick="checkAnswer()">ENTER</button>
 </div>
 <script>
+    const SAVE_KEY = 'st2_cleared';
     let input = "";
     const answer = "271";
-    function press(num) { if (input.length < 3) { input += num; updateDisplay(); } }
-    function clearInput() { input = ""; updateDisplay(); }
-    function updateDisplay() { document.getElementById("display").innerText = input.padEnd(3, "_"); }
+
+    function press(num) { 
+        if (input.length < 3) { 
+            input += num; 
+            updateDisplay(); 
+        } 
+    }
+    
+    function clearInput() { 
+        input = ""; 
+        updateDisplay(); 
+    }
+    
+    function updateDisplay() { 
+        document.getElementById("display").innerText = input.padEnd(3, "_"); 
+    }
+    
     function checkAnswer() {
         if (input === answer) {
+            // クリア状況を記憶
+            localStorage.setItem(SAVE_KEY, 'true');
             document.getElementById("correct-overlay").style.display = "flex";
-            setTimeout(() => { location.href = 'index.html?clear=2'; }, 2000);
+            setTimeout(() => { 
+                location.href = 'index.html?clear=2'; 
+            }, 2000);
         } else {
             clearInput();
         }
     }
+
+    // ページ読み込み時に未クリアなら入力欄を初期化
+    updateDisplay();
 </script>
 </body>
 </html>
