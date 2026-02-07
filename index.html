@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>不測演算 - Puzzle Menu</title>
     <style>
-        /* レトロなフォントと日本語ドットフォントを読み込み */
+        /* スタイル部分は一護のコードをそのまま維持しんす */
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap');
 
         body { 
@@ -19,16 +19,13 @@
             margin: 0; 
         }
 
-        /* ポップなタイトルのスタイル */
         .game-title {
             font-family: 'DotGothic16', sans-serif;
             font-size: 64px;
             margin-bottom: 10px;
-            /* ポップなグラデーション */
             background: linear-gradient(to bottom, #ff00de, #ff7675, #feca57);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* 文字の縁取り */
             filter: drop-shadow(4px 4px 0px #444);
             letter-spacing: 4px;
         }
@@ -73,6 +70,9 @@
             pointer-events: none; 
             opacity: 0.7;
         }
+
+        /* おまけ：リセットボタン（デバッグや最初から遊びたい時用） */
+        .reset-link { margin-top: 30px; font-size: 8px; color: #666; cursor: pointer; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -83,32 +83,54 @@
 
     <div class="menu-container">
         <div class="stage-btn" onclick="location.href='stage1.html'">ST1</div>
-        
         <div id="st2" class="stage-btn locked">ST2</div>
         <div id="st3" class="stage-btn locked">ST3</div>
         <div id="st4" class="stage-btn locked">ST4</div>
     </div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const clearLevel = parseInt(params.get('clear')) || 0;
+    <div class="reset-link" onclick="resetGame()">RESET DATA</div>
 
+    <script>
+        // 1. まず「今クリアして戻ってきた直後か」を確認して保存する
+        const params = new URLSearchParams(window.location.search);
+        const clearLevelFromURL = parseInt(params.get('clear'));
+
+        if (!isNaN(clearLevelFromURL)) {
+            // URLにclearがあれば、それをブラウザに記憶させるでありんす
+            const currentSaved = parseInt(localStorage.getItem('game_clear_level')) || 0;
+            if (clearLevelFromURL > currentSaved) {
+                localStorage.setItem('game_clear_level', clearLevelFromURL);
+            }
+        }
+
+        // 2. ブラウザに保存されているクリア状況を読み込む
+        const clearLevel = parseInt(localStorage.getItem('game_clear_level')) || 0;
+
+        // 3. ロック解除の判定
         if (clearLevel >= 1) {
             const btn = document.getElementById('st2');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage2.html?clear=1'; };
+            btn.onclick = function() { location.href = 'stage2.html'; };
         }
 
         if (clearLevel >= 2) {
             const btn = document.getElementById('st3');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage3.html?clear=2'; };
+            btn.onclick = function() { location.href = 'stage3.html'; };
         }
 
         if (clearLevel >= 3) {
             const btn = document.getElementById('st4');
             btn.classList.remove('locked');
-            btn.onclick = function() { location.href = 'stage4.html?clear=3'; };
+            btn.onclick = function() { location.href = 'stage4.html'; };
+        }
+
+        // データを消して最初からにする関数
+        function resetGame() {
+            if(confirm("進行状況をリセットして最初から遊びますか？")) {
+                localStorage.clear();
+                location.href = 'index.html';
+            }
         }
     </script>
 
