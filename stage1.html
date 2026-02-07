@@ -7,7 +7,12 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         body { margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #90EE90; font-family: 'Press Start 2P', cursive; box-sizing: border-box; }
-        .back-btn { align-self: flex-start; background: #fff; border: 3px solid #444; padding: 5px 10px; cursor: pointer; font-size: 10px; margin-bottom: 10px; }
+        
+        /* 戻るボタンのスタイル */
+        .back-nav { align-self: flex-start; margin-bottom: 10px; width: 100%; max-width: 440px; }
+        .back-btn-top { background: #fff; border: 3px solid #444; padding: 5px 10px; cursor: pointer; font-size: 10px; font-family: inherit; }
+        .back-btn-top:active { transform: translateY(2px); }
+
         .whiteboard { background: #fff; border: 6px solid #444; padding: 15px 10px; width: 100%; max-width: 440px; box-shadow: 10px 10px 0 rgba(0,0,0,0.1); margin-bottom: 20px; box-sizing: border-box; }
         .line { display: flex; align-items: center; min-height: 40px; font-size: 14px; margin-bottom: 8px; white-space: nowrap; }
         .step-box { width: 40px; height: 30px; margin: 0 5px; flex-shrink: 0; }
@@ -28,7 +33,11 @@
     </style>
 </head>
 <body>
-<button class="back-btn" onclick="location.href='index.html'">BACK</button>
+
+<div class="back-nav">
+    <button class="back-btn-top" onclick="location.href='index.html'">BACK</button>
+</div>
+
 <div id="correct-overlay"><div>〇</div></div>
 <div class="whiteboard">
     <div class="line">1 <div class="step-box"><svg><path d="M5,25 V5 H35" /></svg></div> 2 = 3</div>
@@ -54,13 +63,17 @@
     <button class="key clear" onclick="clearInput()">C</button><button class="key" onclick="press(0)">0</button><button class="key enter" onclick="checkAnswer()">ENTER</button>
 </div>
 <script>
+    const SAVE_KEY = 'st1_cleared';
     let input = "";
-    // 正解を一護の指定通り「7」に変更でありんす
     const answer = "7"; 
+
     function press(val) { if (input.length < 10) { input += val; document.getElementById("display").innerText = input; } }
     function clearInput() { input = ""; document.getElementById("display").innerText = ""; }
+    
     function checkAnswer() {
         if (input === answer) {
+            // クリア状況を記憶しんす
+            localStorage.setItem(SAVE_KEY, 'true');
             document.getElementById("correct-overlay").style.display = "flex";
             setTimeout(() => { 
                 location.href = 'index.html?clear=1'; 
