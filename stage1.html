@@ -42,7 +42,7 @@
         <div class="line quest-line">
             3-5 <div class="step-box" style="width:40px;"><svg><path d="M0,5 H40 M20,5 V25" /></svg></div> 
             2 <div class="step-box" style="width:45px;"><svg><path d="M5,25 V18 H18 V12 H31 V5 H40" /></svg></div> 
-            1-9-3 = ?
+            9-1 = ?
         </div>
     </div>
 </div>
@@ -55,21 +55,20 @@
 </div>
 <script>
     let input = "";
-    const answer = "0"; 
+    // 正解を一護の指定通り「7」に変更でありんす
+    const answer = "7"; 
     function press(val) { if (input.length < 10) { input += val; document.getElementById("display").innerText = input; } }
     function clearInput() { input = ""; document.getElementById("display").innerText = ""; }
-        function checkAnswer() {
+    function checkAnswer() {
         if (input === answer) {
             document.getElementById("correct-overlay").style.display = "flex";
             setTimeout(() => { 
-                // index.htmlに「1をクリアしたよ」と伝えて戻るでありんす
                 location.href = 'index.html?clear=1'; 
             }, 2000);
         } else {
             clearInput();
         }
     }
-
 </script>
 </body>
 </html>
